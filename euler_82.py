@@ -12,8 +12,8 @@ minPathSum = np.zeros(np.shape(matrix)).astype(int)
 
 
 for j in range(cols):
+    # initialisation
     for i in range(rows):
-        
         if j == 0:
             minPathSum[i][j] = matrix[i][j]
         else:

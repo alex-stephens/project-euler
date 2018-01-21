@@ -4,21 +4,47 @@
 # Path sum: four ways
 
 import numpy as np
+from math import inf
 
-digits = 1
-power = 5
-maxNum = 9
-while digits * 9**power >= maxNum:
-    digits += 1
-    maxNum = maxNum * 10 + 9
-maxNum = digits * 9**power
+matrix = np.loadtxt("euler_83.txt", dtype='i', delimiter=',')
+[rows, cols] = np.shape(matrix)
 
-def digitsPower(n,power):
-    string = str(n)
-    return sum([int(x)**power for x in string])
+distance = inf*matrix
+distance[0][0] = matrix[0][0]
+visited = [[False for x in range(rows)] for y in range(cols)]
 
-result = 0
-for i in range(10,maxNum+1):
-    result += (i if digitsPower(i,power) == i else 0)  
+def adjacent(i,j):
+    result = []
+    if i > 0: result.append((i-1,j))
+    if j > 0: result.append((i,j-1))
+    if i < rows-1: result.append((i+1,j))
+    if j < cols-1: result.append((i,j+1))
+    return result
 
-print(result)
+current = (0,0)
+queue, distqueue = [], []
+
+while True:
+    (i,j) = current
+
+    # get new nodes
+    for x,y in adjacent(i,j):
+        distance[x][y] = min(distance[x][y], distance[i][j] + matrix[x][y])
+        if not visited[x][y]:# and (x,y) not in queue:
+            queue.append((x,y))
+            distqueue.append(distance[x][y])
+            
+    while current in queue:
+        index = queue.index(current)
+        queue.pop(index)
+        distqueue.pop(index)
+        
+    
+    if len(queue) == 0:     # no more nodes to visit
+        break
+
+    index = np.argmin(distqueue)   
+    current = queue[index]
+    visited[i][j] = True  
+
+print(int(distance[-1][-1]))
