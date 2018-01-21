@@ -5,40 +5,25 @@
 
 import numpy as np
 
-matrix = np.loadtxt("euler_81.txt", dtype='i', delimiter=',')
+matrix = np.loadtxt("euler_82.txt", dtype='i', delimiter=',')
 
 minPathSum = np.zeros(np.shape(matrix)).astype(int)
 [rows, cols] = np.shape(matrix)
 
+
 for j in range(cols):
+    for i in range(rows):
         
-    
-    
-print(minPathSum[-1][-1])
-
-'''
-# unnecessarily complicated indexing
-diagRows = rows + cols - 1
-
-for s in range(diagRows):   # iterate through diagonals of constant s=i+j
-    
-    num = min([s+1, diagRows - s])
-    first = min([s,rows-1])
-    last = first - (num - 1)
-    
-    for i in range(first, last - 1, -1):
-        j = s - i
-        
-        if i == 0 and j == 0:
+        if j == 0:
             minPathSum[i][j] = matrix[i][j]
-        elif i == 0:
-            minPathSum[i][j] = minPathSum[i][j-1] + matrix[i][j]
-        elif j == 0:
-            minPathSum[i][j] = minPathSum[i-1][j] + matrix[i][j]
         else:
-            options = [minPathSum[i-1][j], minPathSum[i][j-1]]
-            minPathSum[i][j] = min(options) + matrix[i][j]
+            minPathSum[i][j] = minPathSum[i][j-1] + matrix[i][j]
+    
+    # sweep down
+    for i in range(1,rows):
+        minPathSum[i][j] = min(minPathSum[i][j], minPathSum[i-1][j] + matrix[i][j])
+    # sweep up
+    for i in range(rows-2, -1, -1):
+        minPathSum[i][j] = min(minPathSum[i][j], minPathSum[i+1][j] + matrix[i][j])
 
-print(minPathSum[-1][-1])
-'''
-
+print(min(minPathSum[:,-1]))
