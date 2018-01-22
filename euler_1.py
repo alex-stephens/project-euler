@@ -12,7 +12,7 @@ Very fast solution, works for larger numbers
 result = 0
 n = 10**10
 
-def multiples(n):
+def triangular(n):
     return n * (n+1) // 2
 
 chainSums = [i*multiples((n-1) // i) for i in [3,5,15]]
