@@ -3,30 +3,49 @@
 
 # Arranged probability
 
-import numpy as np
+from math import sqrt
+import time
 
 '''
 Need to solve
 b(b-1) / n(n-1) = 1/2
 2b**2 - 2b = n**2 - n
+2(b - 1/2)**2 = n**2 - n + 1/2
+b = 0.5 + 0.5 * sqrt(n**2 - n + 1/2)
 '''
 
-start = 10**12
-n = start
-A = 2
-B = -2
+def isPerfectSquare(n):
+    x = int(sqrt(n))
+    sq = x**2
+    while sq <= n:
+        if sq == n:
+            return True
+        else:
+            x += 1
+            sq = x**2
+    return False
 
-while n < 10*start:
-    C = -(n**2 - n)
-    b = int((-B + (B**2 - 4*A*C)**(1/2))/(2*A))
+start = time.time()
 
-    if 2*b*(b-1) == -C:
-        break
+target = 10**12
+n = target
 
-    n += 1
-
-print(b)
-print(n)
-print(b * (b-1) / (n * (n-1)))
+x = int(target * sqrt(2))
+x += 1 - (x % 2)        # make x odd only
+while not isPerfectSquare(2*x**2 - 1):
+    x += 2
+    #print(x)
     
+n = int(0.5 * (1 + sqrt(2*x**2 - 1)) + 1/2)  # + 1/2 for rounding
+print('n = ' + str(n))
+
+b = int(0.5 * (1 + sqrt(2*n**2 - 2*n + 1)) + 1/2)   
+print('b = ' + str(b))
+
+print(b * (b-1) / (n * (n-1)))
+
+print('time taken: ' + str(time.time() - start) + ' seconds')
+
+    
+        
     
