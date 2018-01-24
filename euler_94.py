@@ -4,19 +4,15 @@
 # Almost equilateral triangles
 
 import numpy as np
+from euler import isPerfectSquare
+from time import time
 
-squares = []
-n = 1
-nextSq = n**2
-cap = 10**9
-while nextSq <= cap:
-    squares.append(nextSq)
-    n += 1
-    nextSq = n**2
+start = time()
+ans = 0
+for i in range(10**9):
+    ans += i
     
-    
-'''
-Checks if a triangle with 
-'''
-def integralArea(a, b):
+print(ans)
+print('time taken: ' + str(time() - start) + ' seconds')
+
     

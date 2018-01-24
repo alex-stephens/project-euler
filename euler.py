@@ -19,6 +19,10 @@ def listPrimes(n):
     primes = [i for i in range(len(A)) if A[i] is True]
     return primes
 
+'''
+Returns a list of all squares less than or equal to n
+'''
+
 def listSquares(n):
     squares = []
     i = 1
@@ -27,6 +31,19 @@ def listSquares(n):
         i += 1
     return squares
 
+'''
+Checks if n is a perfect square
+'''
+def isPerfectSquare(n):
+    x = int(sqrt(n))
+    sq = x**2
+    while sq <= n:
+        if sq == n:
+            return True
+        else:
+            x += 1
+            sq = x**2
+    return False
 
 ''' 
 Computes the maximum sum of a sublist using Kadane's algorithm
