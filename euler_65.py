@@ -23,9 +23,8 @@ def getArray(n):
     arr = [1] * n
     if n is 0:
         arr = []
-    for i in range(n):
-        if (i+2)%3 is 0:
-            arr[i] = 2*(i//3 + 1)
+    for i in range((n+1)//3):
+        arr[3*i + 1] = 2*(i+1)
     return arr
 
 n = 100
