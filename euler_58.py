@@ -3,51 +3,21 @@
 
 # Spiral primes
 
-import numpy as np
-from euler import listPrimes
+from euler import isPrime
 
-size = 1
-increment = 2
-n = 3
-diagonals = []
+n = 1
 fracPrime = 1
-cap = 10**7     # probably need 10**8 to get the solution
-primes = listPrimes(cap)
 numPrime = 0
-print('memed')
-found = True
 
 while fracPrime >= 0.1:
-    size += 2
-    if size**2 > cap:
-        found = False
-        break
+    n += 2
+    numOnDiags = 2*n + 1
     
+    num = n**2 - 3*n + 3
+    for _ in range(3):
+        numPrime += 1 if isPrime(num) else 0
+        num += (n-1)
     
-    for i in range(3):  # no need to check bottom right diagonal
-        newEl = n + i*increment
-        
-        isPrime = False  # search for element near start of sorted primes list
-        j = 0
-        while primes[j] <= newEl:
-            if primes[j] == newEl:
-                isPrime = True
-                break
-            j += 1
-        
-        numPrime += (1 if isPrime else 0)
-        
-    n += 3*increment + (size+1)
-    increment += 2
-    fracPrime = numPrime / (size*2 - 1)
-    print(str(size) + '    ' + str(fracPrime))
+    fracPrime = numPrime / numOnDiags
     
-    #print(str(numPrime) + '   ' + str(size*2-1) + '  ' + str(size))
-    
-    while len(primes) > 0 and newEl > primes[0]:
-        primes.pop(0)
-
-if found:       
-    print(size)
-else:
-    print('Insufficient search range')
+print(n)
