@@ -4,6 +4,7 @@
 # Cuboid route
 
 from euler import isPerfectSquare
+from time import time
 
 '''
 Returns the number of cuboid paths of integral length for a max dimension
@@ -22,6 +23,7 @@ def paths(M):
                     count += c + 1 - (ab+1)//2
     return count
 
+start = time()
 target = 10**6
 M = 100
 cur = paths(M)
@@ -40,9 +42,9 @@ while inc >= 1 or not overshot:
     if overshot:
         inc //= 2
     cur = new
-    print(str(M) + '    ' + str(new))
 M += 1 if new < target else 0
 print(M)
+print('time taken: ' + str(time() - start) + ' seconds')
 
      
 

@@ -104,8 +104,3 @@ for i in range(len(passcode)-1, -1, -1):
         
 print('length: ' + str(len(passcode)))     
 print(''.join([str(x) for x in passcode]))           
-
-            
-
-
-
