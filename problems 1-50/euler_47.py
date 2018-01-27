@@ -3,6 +3,8 @@
 
 # Distinct primes factors
     
+import sys
+sys.path.append('../')
 from euler import listPrimes
 from math import sqrt
 

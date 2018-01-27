@@ -3,6 +3,8 @@
 
 # Consecutive prime sum
 
+import sys
+sys.path.append('../')
 from euler import listPrimes
 
 target = 10**6

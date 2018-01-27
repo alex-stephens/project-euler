@@ -2,7 +2,9 @@
 # Problem 39
 
 # Integer right triangles
-    
+   
+import sys
+sys.path.append('../') 
 from euler import listSquares
 import numpy as np
 

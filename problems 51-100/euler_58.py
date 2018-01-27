@@ -3,6 +3,8 @@
 
 # Spiral primes
 
+import sys
+sys.path.append('../')
 from euler import isPrime
 
 n = 1

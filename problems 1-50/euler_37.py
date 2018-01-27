@@ -3,6 +3,8 @@
 
 # Truncatable primes
     
+import sys
+sys.path.append('../')
 from euler import listPrimes
 import numpy as np
 

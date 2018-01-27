@@ -3,6 +3,8 @@
 
 # Prime permutations
     
+import sys
+sys.path.append('../')
 from euler import listPrimes
 
 searchMax = 10000

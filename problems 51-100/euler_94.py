@@ -3,6 +3,8 @@
 
 # Almost equilateral triangles
 
+import sys
+sys.path.append('../')
 import numpy as np
 from euler import isPerfectSquare
 from time import time

@@ -3,6 +3,8 @@
 
 # Cuboid route
 
+import sys
+sys.path.append('../')
 from euler import isPerfectSquare
 from time import time
 
