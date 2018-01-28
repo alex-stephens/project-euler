@@ -21,5 +21,4 @@ while numBouncy * 100 != num * percent:
     num += 1
     numBouncy += 1 if bouncy(num) else 0
     
-        
 print(num)
