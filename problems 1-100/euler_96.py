@@ -79,7 +79,7 @@ class Sudoku():
             if testgrid[r][j] + self.grid[r][j] == val:
                 return False
         # square
-        R,C = i//3, j//3
+        R,C = r//3, c//3
         for i in range(3*R, 3*R + 3):
             for j in range(3*C, 3*C + 3):
                 if testgrid[i][j] + self.grid[i][j] == val:
@@ -112,7 +112,7 @@ class Sudoku():
             #print('options: ', end = '')
             #print(self.options[i][j])
             #print(self.options)
-            val = reducedOptions[i][j].pop()
+            val = reducedOptions[i][j].pop() # take a value from the options
             #print(self.options)
             
             # if valid, move onto next square
@@ -129,19 +129,20 @@ class Sudoku():
             # otherwise, if there no other option on the current square, 
             # move back
             elif len(reducedOptions[i][j]) == 0:
+                #print('failed test value ' + str(val) + ' for position ' + str((i,j)))
                 while len(reducedOptions[i][j]) == 0:
                     # repopulate and move up until there are more options
+                    #print('backtracking: '+ str((i,j)))
                     reducedOptions[i][j] = set(self.options[i][j]) # TODO - investigate if better to use set()
-                    print('backtracking: '+ str((i,j)))
-                    print('restored options: '+ str(reducedOptions[i][j]))
-                    print('n = ' + str(n))
-                    #print(n)
+                    #print('options after: '+ str(reducedOptions[i][j]))
                     n -= 1
                     i,j = unfilled[n]
-                    print(len(reducedOptions[i][j]))
+                    testgrid[i][j] = 0
                     
-                    solved = True
-                    break
+                    if n < 0:
+                        solved = True
+                        #print('-------- ERROR: BACKTRACKING EXCEEDED --------')
+                        break
             
         for (i,j) in product([x for x in range(9)],repeat=2):
             self.grid[i][j] += testgrid[i][j]
@@ -166,11 +167,13 @@ while sudoku.solvedSquares < 81:
         sudoku.refresh()
         success = sudoku.update()
         print('meme')
+    
     #break   
     # complete via depth-first search
     if sudoku.solvedSquares < 81:
         print('extra meme')
         sudoku.dfs()
+    break
 
 print('DONE')
 
