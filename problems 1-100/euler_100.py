@@ -27,7 +27,7 @@ def isPerfectSquare(n):
 
 start = time.time()
 
-target = 10**12
+target = 10**1
 n = target
 
 x = int(target * sqrt(2))
