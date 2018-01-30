@@ -4,9 +4,9 @@
 # Su Doku
 
 from itertools import product
+from time import time
 
-file = open('euler_96_test.txt', 'r')
-lines = file.readlines()
+s = time()
 
 class Sudoku():
     
@@ -20,21 +20,19 @@ class Sudoku():
                 self.options[i][j] = set()
                 self.solvedSquares += 1
 
+    '''
+    Remove all invalid options at the given location using row, col and square
+    '''
     def eliminate(self,i,j):
         ans = set()
-        # rows
         for y in range(9): 
             cur = grid[i][y]
             if cur != 0:
                 ans.add(cur)
-
-        # columns
         for x in range(9): 
             cur = grid[x][j]
             if cur != 0:
                 ans.add(cur)
-
-        # squares
         R,C = i//3, j//3
         for r in range(3*R,3*R + 3):
             for c in range(3*C, 3*C + 3):
@@ -69,6 +67,9 @@ class Sudoku():
                 success = True
         return success
     
+    '''
+    Check if the given value is valid in the current test grid
+    '''
     def isValid(self,testgrid, r, c, val):
         # row
         for i in range(9):
@@ -85,9 +86,7 @@ class Sudoku():
                 if testgrid[i][j] + self.grid[i][j] == val:
                     return False
         return True
-        
-        
-   
+           
     '''
     Perform depth-first search of the unfilled values
     '''
@@ -102,26 +101,18 @@ class Sudoku():
         for i,j in product([x for x in range(9)], repeat=2):
             if self.grid[i][j] == 0:
                 unfilled.append((i,j))
-        # index of unfilled square to check
         
-        
-        n = 0
+        n = 0   # index of unfilled square to check
         solved = False
+        
         while not solved:
             i,j = unfilled[n]
-            #print('options: ', end = '')
-            #print(self.options[i][j])
-            #print(self.options)
             val = reducedOptions[i][j].pop() # take a value from the options
-            #print(self.options)
             
             # if valid, move onto next square
             if self.isValid(testgrid,i,j,val):
                 testgrid[i][j] = val
                 n += 1
-                print('valid value: ' + str((i,j)), end=' ')
-                print(val)
-                # if  we have reached the end, exit
                 if n >= len(unfilled):
                     solved = True
                     break
@@ -129,54 +120,51 @@ class Sudoku():
             # otherwise, if there no other option on the current square, 
             # move back
             elif len(reducedOptions[i][j]) == 0:
-                #print('failed test value ' + str(val) + ' for position ' + str((i,j)))
                 while len(reducedOptions[i][j]) == 0:
                     # repopulate and move up until there are more options
-                    #print('backtracking: '+ str((i,j)))
                     reducedOptions[i][j] = set(self.options[i][j]) # TODO - investigate if better to use set()
-                    #print('options after: '+ str(reducedOptions[i][j]))
                     n -= 1
                     i,j = unfilled[n]
                     testgrid[i][j] = 0
                     
                     if n < 0:
                         solved = True
-                        #print('-------- ERROR: BACKTRACKING EXCEEDED --------')
+                        print('-------- ERROR: BACKTRACKING EXCEEDED --------')
                         break
             
         for (i,j) in product([x for x in range(9)],repeat=2):
             self.grid[i][j] += testgrid[i][j]
             self.solvedSquares = 81
             
-                
+ 
+file = open('euler_96.txt', 'r')
+lines = file.readlines()
 
+ans = 0
+              
 # read in the puzzle
 for puzzle in range(len(lines)//10):
     grid = [[0 for x in range(9)] for y in range(9)]
     for i in range(9):
         for j in range(9):
-            grid[i][j] = int(lines[i+1][j])
+            grid[i][j] = int(lines[puzzle*10 + i+1][j])
     
-print(grid)
-sudoku = Sudoku(grid)
-
-success = True
-while sudoku.solvedSquares < 81:
-    # Update as much as possible by direct deducation
-    while success:
-        sudoku.refresh()
-        success = sudoku.update()
-        print('meme')
+    sudoku = Sudoku(grid)
     
-    #break   
-    # complete via depth-first search
-    if sudoku.solvedSquares < 81:
-        print('extra meme')
-        sudoku.dfs()
-    break
-
-print('DONE')
-
-
-
-          
+    success = True
+    while sudoku.solvedSquares < 81:
+        # Update as much as possible by direct deducation
+        while success:
+            sudoku.refresh()
+            success = sudoku.update()
+        
+        #break   
+        # complete via depth-first search
+        if sudoku.solvedSquares < 81:
+            sudoku.dfs()
+    print('solved puzzle ' + str(puzzle))
+    string = ''.join([str(x) for x in sudoku.grid[0][:3]])
+    ans += int(string)
+    
+print(ans)
+print('time taken: ' + str(time() - s))          
