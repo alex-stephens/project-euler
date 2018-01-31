@@ -3,31 +3,27 @@
 
 # Square root digital expansion
 
-from math import sqrt
+import sys
+sys.path.append('..')
+from euler import isPerfectSquare
 
-print(sqrt(2))
-
-target = 2
-placeVal = 1
-val = placeVal
-
-num = [0] * (2 + 100)
-# [tens, ones, tenths, hundredths, ...]
-digits = 100
-
-def evaluate(number, highestPlaceVal):
-    result = 0
-    pval = highestPlaceVal
-    for i in range(len(number)):
-        result += pval * number[i]
-        pval /= 10
-    return result
-
-
-for digits in range(digits):
+'''
+Calculates the sum of the first d digits of sqrt(num)
+'''
+def sqrtDecimalSum(num, d):
+    target = num
+    n = 1
     
-    while evaluate(num[:digits+1], 1)**2 < target:
-        num[digits] += 1
-    num[digits] -= 1
-        
-        
+    for i in range(d):
+        while (n+1)**2 < target:
+            n += 1
+        n *= 10
+        target *= 100
+    return str(n)
+
+ans =  0
+
+for n in range(1,101):
+    if not isPerfectSquare(n):
+        ans += sum([int(x) for x in sqrtDecimalSum(n,100)])
+print(ans)        

@@ -3,6 +3,9 @@
 
 # Arranged probability
 
+import sys
+sys.path.append('..')
+from euler import isPerfectSquare
 from math import sqrt
 import time
 
@@ -13,18 +16,6 @@ b(b-1) / n(n-1) = 1/2
 2(b - 1/2)**2 = n**2 - n + 1/2
 b = 0.5 + 0.5 * sqrt(n**2 - n + 1/2)
 '''
-
-def isPerfectSquare(n):
-    x = int(sqrt(n))
-    sq = x**2
-    while sq <= n:
-        if sq == n:
-            return True
-        else:
-            x += 1
-            sq = x**2
-    return False
-
 start = time.time()
 
 target = 10**1

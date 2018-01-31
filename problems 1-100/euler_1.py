@@ -4,21 +4,23 @@
 # Multiples of 3 and 5
 
 import numpy as np
+from time import time 
+
+s = time()
 
 '''
-Very fast solution, works for larger numbers
+Very fast O(1) solution, works for larger numbers
 '''
 
 result = 0
-n = 10**10
+n = 1000
 
 def triangular(n):
     return n * (n+1) // 2
 
-chainSums = [i*multiples((n-1) // i) for i in [3,5,15]]
-
-result = chainSums[0] + chainSums[1] - chainSums[2]
-print(result)
+chainSums = [i*triangular((n-1) // i) for i in [3,5,15]]
+print(chainSums[0] + chainSums[1] - chainSums[2])
+print('time taken: ' + str(time() - s))
 
 
 '''
