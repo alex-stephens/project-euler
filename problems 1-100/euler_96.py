@@ -1,7 +1,7 @@
 # Project Euler
 # Problem 96
 
-# Su Doku
+# Sudoku
 
 from itertools import product
 from time import time
@@ -136,10 +136,8 @@ class Sudoku():
             self.grid[i][j] += testgrid[i][j]
             self.solvedSquares = 81
             
- 
 file = open('euler_96.txt', 'r')
 lines = file.readlines()
-
 ans = 0
               
 # read in the puzzle
@@ -148,23 +146,20 @@ for puzzle in range(len(lines)//10):
     for i in range(9):
         for j in range(9):
             grid[i][j] = int(lines[puzzle*10 + i+1][j])
-    
     sudoku = Sudoku(grid)
-    
+
+    # Update as much as possible by direct deduction
     success = True
-    while sudoku.solvedSquares < 81:
-        # Update as much as possible by direct deducation
-        while success:
-            sudoku.refresh()
-            success = sudoku.update()
+    while success:
+        sudoku.refresh()
+        success = sudoku.update()
+    
+    # complete via depth-first search
+    if sudoku.solvedSquares < 81:
+        sudoku.dfs()
         
-        #break   
-        # complete via depth-first search
-        if sudoku.solvedSquares < 81:
-            sudoku.dfs()
-    print('solved puzzle ' + str(puzzle))
-    string = ''.join([str(x) for x in sudoku.grid[0][:3]])
-    ans += int(string)
+    print('solved puzzle ' + str(puzzle+1))
+    ans += int(''.join([str(x) for x in sudoku.grid[0][:3]]))
     
 print(ans)
 print('time taken: ' + str(time() - s))          
