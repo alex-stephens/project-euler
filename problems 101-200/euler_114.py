@@ -3,15 +3,19 @@
 
 # Counting block combinations I
 
-from scipy.misc import comb
+length = 50
+min_size = 3
+dp = [0 for _ in range(length+1)]
+dp[:min_size] = [1] * min_size
 
-size = 50
-r,g,b = 2,3,4
-ways = 0
-
-for x in [r,g,b]:
-    for num in range(1,size//x+1):        
-        tiles = num + (size - num*x)
-        ways += comb(tiles,num)
-     
-print(int(ways))
+for n in range(min_size, length+1):
+    
+    dp[n] += dp[n-1] # insert a blank at current position
+    
+    for r in range(min_size, n+1):
+        if n == r:
+            dp[n] += dp[n-r]    # no need for a black block before
+        else:
+            dp[n] += dp[n-r-1]  # red block with a black block before
+        
+print(dp[length])
