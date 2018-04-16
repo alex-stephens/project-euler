@@ -8,7 +8,7 @@ def ringSize(n):
 
 if __name__ == '__main__':
 
-    tiles = 1000000
+    tiles = 8
     cap = tiles//4 + 1
     rings = 0
 
@@ -16,7 +16,8 @@ if __name__ == '__main__':
         n_orig = n
         tot = ringSize(n)
         while tot <= tiles:
-            rings += 1
+            if tot == tiles:
+                rings += 1
 
             n -= 2
             if n <= 2: break
