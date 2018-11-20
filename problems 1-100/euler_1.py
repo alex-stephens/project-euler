@@ -4,7 +4,7 @@
 # Multiples of 3 and 5
 
 import numpy as np
-from time import time 
+from time import time
 
 s = time()
 
@@ -28,7 +28,7 @@ Brute-force solution
 
 for i in range(1,n):
     if (i % 3 is 0) or (i % 5 is 0):
-        result += i      
-        
+        result += i
+
 print(result)
 '''
