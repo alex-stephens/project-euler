@@ -5,30 +5,39 @@
 
 from math import log
 
-def digitSum(n):
-    s = sum(list(map(int, list(str(n)))))
-    return s
+cap = 100 # maximum digit sum to consider
 
-# returns true if a is a power of b
-def power(a,b):
-    n = int(log(a-1, b))
-    #print(a,b,n)
-    if b**n == a or b**(n+1) == a:
-        return True
-    return False
+base = [n for n in range(2,cap+1)]
+power = [n for n in base]
 
-n = 1
-x = 11
+'''
+Check if a number is a power of its digit sum.
+'''
+def isPower(n):
+    digitsum = sum([int(x) for x in str(n)])
+    d = digitsum
+    
+    if d == 1 or len(str(n)) == 1: 
+        return False
 
-while n < 31:
-    s = digitSum(x)
-    if s == 1:    # powers of 1 don't grow
+    while d < n:
+        d *= digitsum
+    
+    return d == n
+
+ans = set()
+
+for _ in range(10000):
+    i = power.index(min(power))
+
+    if power[i] < 10 or power[i] in ans:
         pass
-    elif s % 2 != x % 2:
-        pass
-    elif power(x, s):
-        n += 1
-        print(x)
-    x += 1
-        
+    if isPower(power[i]):
+        ans.add(power[i])
+
+    power[i] *= base[i]
+
+a = sorted(list(ans))
+print("Found", len(ans), "terms")
+print("a30 =", a[29])
 
