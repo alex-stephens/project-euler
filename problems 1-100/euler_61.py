@@ -3,86 +3,101 @@
 
 # Cyclical figurate numbers
 
-import sys
-sys.path.append('..')
-from euler import isPerfectSquare
-from math import sqrt
+import math
+import logging
 
-n = 6
 
-'''
-Generates a set of 6 cyclic 4-digit numbers using a single 12-digit number
-'''
-def generate(n):
-    length = len(str(n))//2
-    string = str(n)
-    
-    for i,c in enumerate(string):
-        if i % 2 == 1 and c == '0':
-            return None
-        
-    numbers = [0 for _ in range(length)]
-    for i in range(length-1):
-        numbers[i] = int(string[2*i:2*(i+2)])
-    numbers[-1] = int(string[-2:] + string[:2])
-        
-    return numbers
-        
-# checks if a number is triangular
-def isTri(n):
-    if not isPerfectSquare(1+8*n):
-        return False
-    num = int(sqrt(1 + 8*n))
-    if (num + 1) % 2 == 0:
+def main():
+    N_min, N_max = 3, 8
+    N_vals = list(range(N_min, N_max + 1))
+    min_val, max_val = 1000, 9999
+
+    polygonals = {N: generate_polygonal_in_range(N, min_val, max_val) for N in N_vals}
+    cycle = find_cycle(polygonals)
+
+    print(f"{cycle = }")
+    print(sum((x[0] for x in cycle)))
+
+
+def is_pair(n1, n2):
+    if n1 is None:
         return True
-    return False
-
-# checks if a number is square
-def isSquare(n):
-    if not isPerfectSquare(n**2):
-        return False
-    return True
-
-# checks if a number is pentagonal
-def isPent(n):
-    if not isPerfectSquare(1+24*n):
-        return False
-    num = int(sqrt(1 + 24*n))
-    if (num + 1) % 6 == 0:
-        return True
-    return False
+    return str(n1[0])[2:] == str(n2[0])[:2]
 
 
-# checks if a number is hexagonal
-def isHex(n):
-    if not isPerfectSquare(1+8*n):
-        return False
-    num = int(sqrt(1 + 8*n))
-    if (num + 1) % 4 == 0:
-        return True
-    return False
-
-# checks if a number is heptagonal
-def isHept(n):
-    if not isPerfectSquare(9+40*n):
-        return False
-    num = int(sqrt(9 + 40*n))
-    if (num + 3) % 10 == 0:
-        return True
-    return False
-
-# checks if a number is octagonal
-def isOct(n):
-    if not isPerfectSquare(4+12*n):
-        return False
-    num = int(sqrt(4 + 12*n))
-    if (num + 4) % 4 == 0:
-        return True
-    return False
+def get_successors(x, orders, polygonals):
+    succ = []
+    for o in orders:
+        for y in polygonals[o]:
+            if is_pair(x, (y, o)):
+                succ.append((y, o))
+    return list(succ)
 
 
-if __name__ == '__main__':
-    
-    for n in range(1000000, 999999):
+def dfs(current_path, orders, polygonals):
+    x = None if len(current_path) == 0 else current_path[-1]
+
+    # If there are no more orders to check,
+    # check that the path is a cycle
+    if len(orders) == 0:
+        if is_pair(current_path[-1], current_path[0]):
+            return list(current_path)
+        else:
+            return []
+
+    succ = get_successors(x, orders, polygonals)
+
+    for s in succ:
+        new_path = list(current_path)
+        new_path.append(s)
+
+        new_orders = set(orders)
+        new_orders.remove(s[1])
+
+        extended_path = dfs(new_path, new_orders, polygonals)
+        if len(extended_path) == 0:
+            continue
+        return extended_path
+
+    return []
 
 
+def find_cycle(polygonals):
+    orders = set(polygonals.keys())
+    current_path = ()
+    solution = dfs(current_path, orders, polygonals)
+    return solution
+
+
+def generate_polygonal(N, n):
+
+    if N == 3:
+        return n * (n + 1) // 2
+    elif N == 4:
+        return n**2
+    elif N == 5:
+        return n * (3 * n - 1) // 2
+    elif N == 6:
+        return n * (2 * n - 1)
+    elif N == 7:
+        return n * (5 * n - 3) // 2
+    elif N == 8:
+        return n * (3 * n - 2)
+    else:
+        logging.error(f"Invalid N : {N}")
+        return 0
+
+
+def generate_polygonal_in_range(N, min_value=0, max_value=1):
+    result = []
+    for n in range(int(math.sqrt(2 * (max_value + 1)))):
+        x = generate_polygonal(N, n)
+        if x > max_value:
+            break
+        if x >= min_value:
+            result.append(x)
+    return set(result)
+
+
+if __name__ == "__main__":
+    main()
